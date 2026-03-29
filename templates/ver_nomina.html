@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ver Nómina</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<style>
+.table th {
+    color: #ffffff !important;
+}
+
+body {
+    background: #f4f6f9;
+}
+
+.container {
+    max-width: 1100px;
+}
+
+/* CARD */
+.card {
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border: none;
+}
+
+/* HEADER TABLA AZUL */
+table th {
+    background: linear-gradient(45deg, #0a2a66, #0d3c91);
+    color: #ffffff;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* TABLA */
+.table td {
+    vertical-align: middle;
+}
+
+/* TOTAL DESTACADO */
+.table-success {
+    background-color: #d1e7dd !important;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container mt-4">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div class="d-flex align-items-center gap-3">
+            <img src="{{ url_for('static', filename='img/pasi.png') }}" style="height:40px;">
+
+            <div>
+                <h5 class="fw-bold mb-0">Nómina generada</h5>
+                <small class="text-muted">{{ archivo }}</small>
+            </div>
+        </div>
+
+        <a href="/historial" class="btn btn-dark btn-sm">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+
+    </div>
+
+    <!-- TABLA -->
+    <div class="card p-3">
+
+        <div class="table-responsive">
+        <table class="table table-hover align-middle text-center">
+
+            <thead>
+                <tr>
+                    {% for h in headers %}
+                        {% if h != "Horas" %}
+                            <th>{{ h }}</th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+    {% for fila in filas %}
+    
+    {% set es_total = fila|length > 1 and fila[-2] == 'TOTAL' %}
+    
+    <tr class="{% if es_total %}table-success fw-bold{% endif %}">
+        
+        {% for celda in fila %}
+            {% if headers[loop.index0] != "Horas" %}
+            <td>
+
+                {% if es_total %}
+                    
+                    {% if loop.index == fila|length - 1 %}
+                        TOTAL
+                    {% elif loop.index == fila|length %}
+                        ${{ "{:,.2f}".format(celda) }}
+                    {% else %}
+                        -
+                    {% endif %}
+
+                {% else %}
+
+                    {% if celda is none %}
+                        -
+                    {% elif loop.index >= 4 %}
+                        ${{ "{:,.2f}".format(celda) }}
+                    {% else %}
+                        {{ celda }}
+                    {% endif %}
+
+                {% endif %}
+
+            </td>
+            {% endif %}
+        {% endfor %}
+
+    </tr>
+
+    {% endfor %}
+</tbody>
+        </table>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
