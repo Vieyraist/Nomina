@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}Agregar empleado{% endblock %}
+
+{% block header %}
+Agregar empleado
+{% endblock %}
+
+{% block subheader %}
+Registro de personal
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* BOTONES FORM DELGADOS */
+
+.btn-cancelar {
+    background: #f1f5f9;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 13px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.btn-cancelar:hover {
+    background: #e5e7eb;
+}
+
+.btn-guardar {
+    background: #16a34a;
+    border: none;
+    border-radius: 10px;
+    padding: 6px 12px;
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.btn-guardar:hover {
+    background: #15803d;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+
+    .form-actions {
+        justify-content: space-between;
+    }
+
+    .btn-cancelar,
+    .btn-guardar {
+        flex: 1;
+        text-align: center;
+        padding: 8px 10px; /* más delgado */
+        font-size: 12.5px;
+    }
+}
+.container {
+    max-width: 600px;
+}
+
+.card {
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border: none;
+}
+
+input, select {
+    border-radius: 10px !important;
+    height: 45px;
+}
+
+.btn {
+    border-radius: 10px;
+    padding: 10px;
+}
+
+/* quitar flechas number */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+
+    .container {
+        max-width: 100%;
+    }
+
+    .card {
+        padding: 20px !important;
+    }
+
+}
+
+</style>
+
+<!-- FORM -->
+<form method="POST">
+
+    <div class="card p-4">
+
+        <div class="mb-3">
+            <label class="form-label">Obra</label>
+            <select name="zona" class="form-control" required>
+                <option value="">Seleccionar Obra</option>
+                <option>Guadalajara</option>
+                <option>Celaya</option>
+                <option>Salamanca</option>
+                <option>Querétaro</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Puesto</label>
+            <input type="text" name="puesto" class="form-control" placeholder="Ej. Pintor" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" name="nombre" class="form-control" placeholder="Nombre completo" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Salario</label>
+            <input type="number" step="0.01" name="salario" class="form-control" placeholder="Ej. 0000" required>
+        </div>
+
+        <!-- 🔥 FECHA -->
+        <div class="mb-3">
+            <label class="form-label">Fecha de ingreso</label>
+            <input type="date" name="fecha_ingreso" class="form-control" required>
+        </div>
+
+        <!-- BOTONES -->
+        <div class="d-flex justify-content-end gap-2 mt-3 form-actions">
+
+    <a href="/empleados" class="btn-cancelar">
+        Cancelar
+    </a>
+
+    <button type="submit" class="btn-guardar">
+        <i class="bi bi-check2 me-1"></i> Guardar
+    </button>
+
+</div>
+
+    </div>
+
+</form>
+
+{% endblock %}

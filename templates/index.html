@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block header %}
+Sistema de Nómina
+{% endblock %}
+
+{% block subheader %}
+Gestión semanal
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* BOTÓN NÓMINA PRO */
+.btn-nomina {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    border: none;
+    border-radius: 12px;
+    padding: 10px 18px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 6px 14px rgba(34,197,94,0.3);
+    transition: all 0.2s ease;
+}
+
+/* hover */
+.btn-nomina:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(34,197,94,0.4);
+}
+
+/* click */
+.btn-nomina:active {
+    transform: scale(0.98);
+}
+
+thead th:first-child {
+    border-top-left-radius: 12px;
+}
+thead th:last-child {
+    border-top-right-radius: 12px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.table th {
+    color: #ffffff !important;
+}
+
+.card {
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border: none;
+}
+
+table th {
+    background: linear-gradient(45deg, #0a2a66, #0d3c91);
+    text-align: center;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.input-sm {
+    width: 70px;
+    margin: auto;
+}
+
+/* MOBILE */
+.mobile-card {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    .desktop-table {
+        display: none;
+    }
+
+    .mobile-card {
+        display: block;
+    }
+
+    .employee-card {
+        background: white;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .employee-name {
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .employee-zone {
+        font-size: 13px;
+        color: #666;
+    }
+
+    .input-group-mobile {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+}
+</style>
+
+<form method="POST" action="/generar" onsubmit="return beforeSubmit()">
+
+<div class="card p-3 p-md-4">
+
+    <!-- DESKTOP -->
+    <div class="desktop-table table-responsive">
+    <table class="table table-hover align-middle">
+
+        <thead>
+            <tr>
+                <th>Obra</th>
+                <th>Puesto</th>
+                <th>Empleado</th>
+                <th>Salario</th>
+                <th>T.E</th>
+                <th>Otros</th>
+                <th>Desc</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for emp in empleados %}
+            <tr>
+
+                <td>{{ emp.zona }}</td>
+                <td>{{ emp.puesto }}</td>
+                <td>{{ emp.nombre }}</td>
+
+                <td class="fw-semibold text-success">
+                    ${{ emp.salario }}
+                </td>
+
+                <td>
+                    <input type="number" step="0.1"
+                        name="horas_{{ emp.id }}"
+                        class="form-control input-sm desktop-input">
+                </td>
+
+                <td>
+                    <input type="number" step="0.1"
+                        name="otros_{{ emp.id }}"
+                        class="form-control input-sm desktop-input">
+                </td>
+
+                <td>
+                    <input type="number" step="0.1"
+                        name="desc_{{ emp.id }}"
+                        class="form-control input-sm desktop-input">
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+    </div>
+
+    <!-- MOBILE -->
+    <div class="mobile-card">
+
+        {% for emp in empleados %}
+        <div class="employee-card">
+
+            <div class="employee-name">
+                👤 {{ emp.nombre }}
+            </div>
+
+            <div class="employee-zone">
+                {{ emp.zona }} - {{ emp.puesto }}
+            </div>
+
+            <div class="input-group-mobile">
+                <input type="number" step="0.1"
+                    name="horas_{{ emp.id }}"
+                    placeholder="T.E"
+                    class="form-control mobile-input">
+
+                <input type="number" step="0.1"
+                    name="otros_{{ emp.id }}"
+                    placeholder="Otros"
+                    class="form-control mobile-input">
+
+                <input type="number" step="0.1"
+                    name="desc_{{ emp.id }}"
+                    placeholder="Desc"
+                    class="form-control mobile-input">
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- BOTÓN -->
+    <div class="text-end mt-3">
+		<button type="submit" class="btn-nomina">
+			<i class="bi bi-cash-stack me-2"></i>
+				Generar Nómina
+		</button>
+    </div>
+
+</div>
+
+</form>
+
+<script>
+
+/* detectar mobile */
+function isMobile() {
+    return window.innerWidth <= 768;
+}
+
+/* activar/desactivar inputs */
+function toggleInputs() {
+
+    const desktop = document.querySelectorAll('.desktop-input');
+    const mobile = document.querySelectorAll('.mobile-input');
+
+    if (isMobile()) {
+        desktop.forEach(el => el.disabled = true);
+        mobile.forEach(el => el.disabled = false);
+    } else {
+        desktop.forEach(el => el.disabled = false);
+        mobile.forEach(el => el.disabled = true);
+    }
+}
+
+/* antes de enviar */
+function beforeSubmit() {
+    toggleInputs();
+    return true;
+}
+
+/* al cargar */
+document.addEventListener('DOMContentLoaded', toggleInputs);
+
+/* si cambia tamaño */
+window.addEventListener('resize', toggleInputs);
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Ver Nómina{% endblock %}
+
+{% block header %}
+Nómina generada
+{% endblock %}
+
+{% block subheader %}
+{{ archivo }}
+{% endblock %}
+
+{% block content %}
+
+<style>
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+thead th:first-child {
+    border-top-left-radius: 12px;
+}
+
+thead th:last-child {
+    border-top-right-radius: 12px;
+}
+
+/* HEADER TABLA */
+table th {
+    background: linear-gradient(45deg, #0a2a66, #0d3c91);
+    color: #ffffff !important;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* TABLA */
+.table td {
+    vertical-align: middle;
+}
+
+/* TOTAL */
+.table-success {
+    background-color: #d1e7dd !important;
+    font-weight: bold;
+}
+
+</style>
+
+
+
+<!-- TABLA -->
+<div class="table-responsive">
+<table class="table table-hover align-middle text-center">
+
+    <thead>
+        <tr>
+            {% for h in headers %}
+                {% if h != "Horas" %}
+                    <th>{{ h }}</th>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for fila in filas %}
+    
+    {% set es_total = fila|length > 1 and fila[-2] == 'TOTAL' %}
+    
+    <tr class="{% if es_total %}table-success{% endif %}">
+        
+        {% for celda in fila %}
+            {% if headers[loop.index0] != "Horas" %}
+            <td>
+
+                {% if es_total %}
+                    
+                    {% if loop.index == fila|length - 1 %}
+                        TOTAL
+                    {% elif loop.index == fila|length %}
+                        ${{ "{:,.2f}".format(celda) }}
+                    {% else %}
+                        -
+                    {% endif %}
+
+                {% else %}
+
+                    {% if celda is none %}
+                        -
+                    {% elif loop.index >= 4 %}
+                        ${{ "{:,.2f}".format(celda) }}
+                    {% else %}
+                        {{ celda }}
+                    {% endif %}
+
+                {% endif %}
+
+            </td>
+            {% endif %}
+        {% endfor %}
+
+    </tr>
+
+    {% endfor %}
+    </tbody>
+
+</table>
+</div>
+
+{% endblock %}

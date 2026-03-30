@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{% block title %}{% endblock %}</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<style>
+/* MOBILE SIDEBAR PRO */
+
+.mobile-sidebar {
+    background: #ffffff;
+    border-radius: 0 16px 16px 0;
+}
+
+/* links */
+.mobile-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #374151;
+    font-size: 15px;
+    margin-bottom: 6px;
+    transition: all 0.2s ease;
+}
+
+.mobile-link i {
+    font-size: 18px;
+}
+
+/* hover */
+.mobile-link:hover {
+    background: #f1f5f9;
+    transform: translateX(3px);
+}
+
+/* activo */
+.mobile-link.active {
+    background: #2563eb;
+    color: white;
+}
+
+/* logout */
+.mobile-link.logout {
+    color: #dc2626;
+}
+
+.mobile-link.logout:hover {
+    background: #fee2e2;
+}
+
+/* =========================
+   BASE
+========================= */
+body {
+    background: #f4f6f9;
+    color: #1f2937;
+}
+
+/* =========================
+   HEADER
+========================= */
+.header-bar {
+    background: #ffffff;
+    padding: 12px 18px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* izquierda */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-left img {
+    height: 38px;
+}
+
+.header-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.header-sub {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* =========================
+   MENU
+========================= */
+.nav-menu {
+    display: flex;
+    gap: 6px;
+}
+
+.nav-menu a {
+    padding: 8px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.nav-menu a:hover {
+    background: #f1f5f9;
+}
+
+.nav-menu a.active {
+    background: #2563eb;
+    color: white;
+}
+
+/* =========================
+   DERECHA
+========================= */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* botón azul */
+.btn-primary-custom {
+    background: #2563eb;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px;
+    color: white;
+    font-weight: 500;
+}
+
+/* icono */
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #374151;
+    text-decoration: none;
+}
+
+/* =========================
+   CONTENT
+========================= */
+.content {
+    padding: 20px;
+}
+
+.card-custom {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* =========================
+   MOBILE 🔥
+========================= */
+.menu-toggle {
+    display: none;
+}
+
+/* 🔥 CLAVE */
+@media (max-width: 768px) {
+
+    /* ocultar menú desktop */
+    .nav-menu {
+        display: none;
+    }
+
+    /* ocultar botones grandes */
+    .btn-primary-custom {
+        display: none !important;
+    }
+
+    /* ocultar logout icon */
+    .icon-btn {
+        display: none !important;
+    }
+
+    /* mostrar hamburguesa */
+    .menu-toggle {
+        display: block;
+    }
+
+    /* header más compacto */
+    .header-bar {
+        padding: 10px 14px;
+    }
+
+    .header-title {
+        font-size: 15px;
+    }
+
+    .header-left img {
+        height: 34px;
+    }
+}
+
+/* =========================
+   MOBILE SIDEBAR
+========================= */
+.mobile-sidebar a {
+    display: block;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    text-decoration: none;
+    color: #374151;
+    font-size: 15px;
+}
+
+.mobile-sidebar a.active {
+    background: #2563eb;
+    color: white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid p-2 p-md-3">
+
+    <!-- HEADER -->
+    <div class="header-bar">
+
+        <!-- IZQUIERDA -->
+        <div class="header-left">
+            <img src="{{ url_for('static', filename='img/pasi.png') }}">
+            <div>
+                <div class="header-title">{% block header %}{% endblock %}</div>
+                <div class="header-sub">{% block subheader %}{% endblock %}</div>
+            </div>
+        </div>
+
+        <!-- MENU -->
+        <div class="nav-menu">
+            <a href="/" class="{% if request.path == '/' %}active{% endif %}">
+                <i class="bi bi-house-door me-1"></i> Inicio
+            </a>
+            <a href="/empleados" class="{% if 'empleados' in request.path %}active{% endif %}">
+                <i class="bi bi-people me-1"></i> Empleados
+            </a>
+            <a href="/historial" class="{% if 'historial' in request.path %}active{% endif %}">
+                <i class="bi bi-clock-history me-1"></i> Historial
+            </a>
+        </div>
+
+        <!-- DERECHA -->
+        <div class="header-right">
+
+            <!-- SOLO DESKTOP -->
+            {% if 'empleados' in request.path %}
+            <a href="/agregar_empleado" class="btn-primary-custom">
+                <i class="bi bi-plus-lg me-1"></i> Agregar
+            </a>
+            {% endif %}
+
+            <button class="icon-btn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#logoutModal">
+                <i class="bi bi-box-arrow-right"></i>
+            </button>
+
+            <!-- MOBILE -->
+            <button class="btn menu-toggle" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+                <i class="bi bi-list"></i>
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+        <div class="card-custom">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+</div>
+
+<!-- MOBILE MENU -->
+<div class="offcanvas offcanvas-start mobile-sidebar" id="mobileMenu">
+
+    <!-- HEADER PRO -->
+    <div class="offcanvas-header border-bottom">
+
+        <div class="d-flex align-items-center gap-2">
+
+            <img src="{{ url_for('static', filename='img/pasi.png') }}" style="height:36px;">
+
+            <div>
+                <div style="font-weight:600; font-size:15px;">PASI</div>
+                <div style="font-size:12px; color:#6b7280;">Sistema de Nómina</div>
+            </div>
+
+        </div>
+
+        <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+
+    </div>
+
+    <!-- BODY -->
+    <div class="offcanvas-body">
+
+        <!-- SECCIÓN -->
+        <div style="font-size:11px; color:#9ca3af; margin-bottom:10px;">
+            NAVEGACIÓN
+        </div>
+
+        <!-- LINKS -->
+        <a href="/" class="mobile-link {% if request.path == '/' %}active{% endif %}">
+            <i class="bi bi-house-door"></i>
+            Inicio
+        </a>
+
+        <a href="/empleados" class="mobile-link {% if 'empleados' in request.path %}active{% endif %}">
+            <i class="bi bi-people"></i>
+            Empleados
+        </a>
+
+        <a href="/historial" class="mobile-link {% if 'historial' in request.path %}active{% endif %}">
+            <i class="bi bi-clock-history"></i>
+            Historial
+        </a>
+
+        <a href="/agregar_empleado" class="mobile-link">
+            <i class="bi bi-person-plus"></i>
+            Agregar empleado
+        </a>
+
+        <hr>
+
+        <!-- LOGOUT -->
+        <a href="#" 
+           class="mobile-link logout"
+           data-bs-toggle="modal"
+           data-bs-target="#logoutModal">
+
+            <i class="bi bi-box-arrow-right"></i>
+            Cerrar sesión
+        </a>
+
+    </div>
+
+</div>
+
+
+</div>
+
+<!-- MODAL LOGOUT -->
+<div class="modal fade" id="logoutModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-body text-center">
+        <p class="mb-0">¿Seguro que deseas cerrar sesión?</p>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <a href="/logout" class="btn btn-danger">Salir</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
