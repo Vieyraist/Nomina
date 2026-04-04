@@ -87,8 +87,8 @@ table th {
 
                 {% else %}
 
-                    {% if celda is none %}
-                        -
+                {% if celda is none or celda == 0 %} 
+                            -
                     {% elif loop.index >= 4 %}
                         ${{ "{:,.2f}".format(celda) }}
                     {% else %}
